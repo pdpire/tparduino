@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Calendar;
+import java.util.List;
 
 import com.example.tparduino.model.Sensor;
 import com.example.tparduino.model.SensorJdbcRepository;
@@ -40,7 +41,7 @@ public class SensorController {
         Calendar c1 = Calendar.getInstance();
         String fecha = String.valueOf(c1.getTime()) ;
        
-        logger.info("Llamado a servicio con sensor = " + sensorId);
+        logger.info("Llamado a servicio sensorNotification con sensor = " + sensorId);
         try {
             logger.info("Inserting -> {}", repository.insert(new Sensor(sensorId, fecha)));
             return new ResponseEntity<String>("Se guardó movimiento de sendor: " + sensorId, HttpStatus.OK);
@@ -49,6 +50,21 @@ public class SensorController {
             return new ResponseEntity<String>("Error al guardar movimiento del sensor", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    @GetMapping(value = "/movements", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    @ApiOperation(tags = "SensorNotification", value = "Muestra lista de movimientos guardados", notes = "MS que muestra lista completa de movimientos")
+	@ApiResponses({ @ApiResponse(code = 200, message = "All movements") })
+    public ResponseEntity<List<Sensor>> findAllMovements(){
+        logger.info("Llamado a servicio findAllMovements");
+        try {
+            List<Sensor> lista = repository.findAll();
+            logger.info("All movements -> {}", lista);
+            return new ResponseEntity<List<Sensor>>(lista, HttpStatus.OK);
+        }catch (Exception e) {
+            logger.error("Error al obtener movimientos");
+            return new ResponseEntity<List<Sensor>>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
