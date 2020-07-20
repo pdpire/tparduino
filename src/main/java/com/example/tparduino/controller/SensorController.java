@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.http.MediaType;
 import org.apache.logging.log4j.Logger;
 
@@ -35,7 +37,8 @@ public class SensorController {
 
     @GetMapping(value = "/notification", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ApiOperation(tags = "SensorNotification", value = "Guarda Sensor que detecto actividad", notes = "MS que escribe en archivo sensor y fecha")
-	@ApiResponses({ @ApiResponse(code = 200, message = "Se guardo sensor y fecha") })
+    @ApiResponses({ @ApiResponse(code = 200, message = "Se guardo sensor y fecha") })
+    @CrossOrigin(origins = "*", methods = { RequestMethod.GET})
     public ResponseEntity<String> sensorNotification(@RequestParam String sensorId){
 
         Calendar c1 = Calendar.getInstance();
@@ -54,7 +57,8 @@ public class SensorController {
 
     @GetMapping(value = "/movements", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ApiOperation(tags = "SensorNotification", value = "Muestra lista de movimientos guardados", notes = "MS que muestra lista completa de movimientos")
-	@ApiResponses({ @ApiResponse(code = 200, message = "All movements") })
+    @ApiResponses({ @ApiResponse(code = 200, message = "All movements") })
+    @CrossOrigin(origins = "*", methods = { RequestMethod.GET})
     public ResponseEntity<List<Sensor>> findAllMovements(){
         logger.info("Llamado a servicio findAllMovements");
         try {
